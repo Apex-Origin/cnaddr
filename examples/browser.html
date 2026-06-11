@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>cnaddr · 浏览器 ESM 示例</title>
+  </head>
+  <body>
+    <h3>cnaddr 浏览器示例</h3>
+    <input
+      id="q"
+      size="60"
+      value="张三 13812345678 浙江省杭州市余杭区文一西路969号"
+    />
+    <button id="go">解析</button>
+    <pre id="out"></pre>
+
+    <!-- 已发布后可直接用 CDN：
+         import { parse } from 'https://esm.sh/cnaddr';
+         本地演示请先 `pnpm build`，下面引用构建产物。 -->
+    <script type="module">
+      import { parse } from '../dist/index.js';
+      const out = document.getElementById('out');
+      const run = () =>
+        (out.textContent = JSON.stringify(
+          parse(document.getElementById('q').value),
+          null,
+          2,
+        ));
+      document.getElementById('go').addEventListener('click', run);
+      run();
+    </script>
+  </body>
+</html>

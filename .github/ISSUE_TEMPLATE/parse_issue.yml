@@ -1,0 +1,35 @@
+name: 🧭 解析不准 / Parsing issue
+description: 提交一个识别错误或遗漏的地址样例
+title: '[parse] '
+labels: ['parsing']
+body:
+  - type: input
+    id: input
+    attributes:
+      label: 输入地址
+      description: 触发问题的原始地址字符串（可脱敏）
+      placeholder: 张三 13812345678 浙江省杭州市余杭区文一西路969号
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际输出
+      description: 粘贴 `parse()` 的实际结果
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望输出
+      description: 你期望得到的字段
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: cnaddr 版本
+      placeholder: 1.0.0
+    validations:
+      required: true

@@ -1,0 +1,27 @@
+name: 🐛 Bug 报告 / Bug report
+description: 报告一个程序缺陷
+title: '[bug] '
+labels: ['bug']
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 问题描述
+      description: 发生了什么？预期是什么？
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤
+      description: 最小可复现代码
+      render: ts
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 运行环境
+      placeholder: cnaddr 1.0.0 / Node 20 / Chrome 124
+    validations:
+      required: true
