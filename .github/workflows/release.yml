@@ -3,6 +3,7 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,6 +16,9 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    # 仅在配置了 NPM_TOKEN 后才发布；未配置时整个步骤跳过（工作流保持绿色）
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -28,11 +32,15 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - if: ${{ env.NPM_TOKEN != '' }}
+        run: pnpm install --frozen-lockfile
+
+      - if: ${{ env.NPM_TOKEN != '' }}
+        run: pnpm build
 
       # 创建「Version Packages」PR，或在 changeset 合并后发布到 npm
-      - uses: changesets/action@v1
+      - if: ${{ env.NPM_TOKEN != '' }}
+        uses: changesets/action@v1
         with:
           publish: pnpm release
           version: pnpm changeset version
@@ -42,3 +50,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - if: ${{ env.NPM_TOKEN == '' }}
+        run: echo "ℹ️ 未配置 NPM_TOKEN，跳过发布。在仓库 Settings → Secrets 添加 NPM_TOKEN 后即可自动发布到 npm。"
